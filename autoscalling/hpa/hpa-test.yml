@@ -3,6 +3,24 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: nginx-test-hpa
 spec:
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      selectPolicy: Max
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15
+      - type: Pods
+        value: 4
+        periodSeconds: 15
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      selectPolicy: Min
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment

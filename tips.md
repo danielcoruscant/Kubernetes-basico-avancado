@@ -13,3 +13,4 @@
 ## Para funcionamento de VPA e HPA
 
 - Instalação do componente metrics server: https://kubernetes-sigs.github.io/metrics-server/
+- Intalação do VPA: https://kubernetes.io/docs/concepts/workloads/autoscaling/vertical-pod-autoscale/
