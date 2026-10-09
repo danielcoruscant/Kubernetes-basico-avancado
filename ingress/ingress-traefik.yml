@@ -1,0 +1,14 @@
+# whoami-ingressroute.yaml
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nginx-2-test
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`nginx-2.demo.com`)
+      kind: Rule
+      services:
+        - name: nginx-2-test
+          port: 80

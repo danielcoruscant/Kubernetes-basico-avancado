@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-test
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: nginx.demo.com
+    http:
+      paths:
+      - path: /nginx(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: nginx-test
+            port:
+              number: 80
+      - path: /apache(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: apache-test
+            port:
+              number: 80

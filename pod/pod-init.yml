@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-init-container-test
+spec:
+  containers:
+    - name: my-container-nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+  initContainers:
+    - name: init-myservice
+      image: wbitt/network-multitool
+      command:
+        - bash
+        - -c
+        - |
+          echo Initializing...
+          until nslookup my-sql-svc; do
+            echo Waiting for service...
+            sleep 2
+          done
+          echo Service is up and running.

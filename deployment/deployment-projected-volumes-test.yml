@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-projected-volumes-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-projected-volumes-test
+  template:
+    metadata:
+      labels:
+        app: nginx-projected-volumes-test
+    spec:
+      containers:
+      - name: nginx-projected-volumes-test-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: projected-volume-test
+          mountPath: "/projected-volume"
+          readOnly: true
+      volumes:
+      - name: projected-volume-test
+        projected:
+          sources:
+          - secret:
+              name: secrets-test
+              items:
+              - key: username
+                path: my-secrets/username
+              - key: password
+                path: my-secrets/password
+          - configMap:
+              name: config-map-test
+              items:
+              - key: index.html
+                path: index.html
+          - configMap:
+              name: config-map-test
+              items:
+              - key: vhost-app2.conf
+                path: vhost-app2.conf

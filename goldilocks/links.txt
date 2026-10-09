@@ -1,0 +1,2 @@
+Instalação: https://goldilocks.docs.fairwinds.com/
+Values: https://artifacthub.io/packages/helm/fairwinds-stable/goldilocks

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apache-test
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apache-test
+  template:
+    metadata:
+      labels:
+        app: apache-test
+    spec:
+      containers:
+      - name: apache-test-container
+        image: httpd:latest
+        ports:
+        - containerPort: 80

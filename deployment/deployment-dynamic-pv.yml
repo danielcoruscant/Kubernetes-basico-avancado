@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-pv-dynamic-test
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-pv-dynamic-test
+  template:
+    metadata:
+      labels:
+        app: nginx-pv-dynamic-test
+    spec:
+      containers:
+      - name: nginx-pv-dynamic-test-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: persistent-volume-dynamic
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: persistent-volume-dynamic
+        persistentVolumeClaim:
+          claimName: pvc-dynamic-test

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: daemon-set-test
+  namespace: default
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: daemon-set-test
+  template:
+    metadata:
+      labels:
+        app: daemon-set-test
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: ubuntu-server-kube3
+      containers:
+        - name: container-daemon-set-test
+          image: busybox
+          command: ["sleep", "infinity"]
+      restartPolicy: Always

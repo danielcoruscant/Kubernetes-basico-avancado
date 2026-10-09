@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-cm-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-cm-test
+  template:
+    metadata:
+      labels:
+        app: nginx-cm-test
+    spec:
+      containers:
+      - name: nginx-cm-test-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: EXAMPLE_PROPERTY_1
+          valueFrom:
+            configMapKeyRef:
+              name: config-map-test
+              key: example.property.1
+        - name: EXAMPLE_PROPERTY_2
+          valueFrom:
+            configMapKeyRef:
+              name: config-map-test
+              key: example.property.2
+        - name: USERNAME_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: secrets-test
+              key: username-secret
+        - name: PASSWORD_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: secrets-test
+              key: password-secret
+        volumeMounts:
+        - name: index-html-volume
+          mountPath: /usr/share/nginx/html/index.html
+          subPath: index.html
+          readOnly: true
+        - name: vhost-app2-conf-volume
+          mountPath: /etc/nginx/conf.d/vhost-app2.conf
+          subPath: vhost-app2.conf
+        - name: secrets-test-volume
+          mountPath: /etc/secrets
+          readOnly: true
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - |
+                until [ -s /var/run/nginx.pid ] && nginx -T >/dev/null 2>&1; do
+                  sleep 1
+                done
+                echo Initializing...
+                mkdir -p /usr/share/nginx/html/app-2
+                echo "<html><body><h1>ConfigMap Test Page App 2</h1></body></html>" > /usr/share/nginx/html/app-2/index.html
+                echo Initialization complete.
+      volumes:
+      - name: index-html-volume
+        configMap:
+          name: config-map-test
+          items:
+          - key: index.html
+            path: index.html
+      - name: vhost-app2-conf-volume
+        configMap:
+          name: config-map-test
+          items:
+          - key: vhost-app2.conf
+            path: vhost-app2.conf
+      - name: secrets-test-volume
+        secret:
+          secretName: secrets-test
