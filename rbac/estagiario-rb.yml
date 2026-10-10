@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: estagiario-rb
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: estagiario-role
+subjects:
+- kind: User
+  name: estagiario
+  apiGroup: rbac.authorization.k8s.io

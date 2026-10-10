@@ -14,3 +14,7 @@
 
 - Instalação do componente metrics server: https://kubernetes-sigs.github.io/metrics-server/
 - Intalação do VPA: https://kubernetes.io/docs/concepts/workloads/autoscaling/vertical-pod-autoscale/
+
+## Upgrade de cluster
+
+- Kubent para verificar quais componentes estão depreciados e precisam de atualização antes de um upgrade do cluster: https://github.com/doitintl/kube-no-trouble

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-role-test
+  namespace: default
+spec:
+  serviceAccountName: service-account-test
+  containers:
+  - name: container-role-test
+    image: wbitt/network-multitool
+    command: ["sleep", "infinity"]

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-taint-toleration
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-taint-toleration
+  template:
+    metadata:
+      labels:
+        app: nginx-taint-toleration
+        kubernetes.io/hostname: k8s-worker-3
+    spec:
+      tolerations:
+        - key: nodegroup
+          operator: Equal
+          value: backend
+          effect: NoSchedule
+      containers:
+        - name: nginx-container-taint-toleration
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"

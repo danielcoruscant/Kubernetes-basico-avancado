@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-topology-spread-constraints
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-topology-spread-constraints
+  template:
+    metadata:
+      labels:
+        app: nginx-topology-spread-constraints
+        kubernetes.io/hostname: k8s-worker-3
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: "kubernetes.io/hostname"
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: nginx-topology-spread-constraints
+          matchLabelKeys: # Útil para rollouts de pods
+            - pod-template-hash
+      containers:
+        - name: nginx-container-topology-spread-constraints
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"

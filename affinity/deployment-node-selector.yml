@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-node-selector
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-node-selector
+  template:
+    metadata:
+      labels:
+        app: nginx-node-selector
+        kubernetes.io/hostname: k8s-worker-3
+    spec:
+      nodeSelector:
+        disktype: ssd
+      containers:
+      - name: nginx-container-node-selector
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"

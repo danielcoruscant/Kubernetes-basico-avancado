@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-pod-affinity
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-pod-affinity
+  template:
+    metadata:
+      labels:
+        app: nginx-pod-affinity
+        kubernetes.io/hostname: k8s-worker-3
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - database
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: nginx-container-pod-affinity
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
